@@ -2,7 +2,16 @@
 ## 3.5-Minute Recorded Walkthrough
 **Format**: Screen recording with voiceover
 **Target**: Customer meeting / booth loop / social share
-**Pre-requisites**: Data loaded, Streamlit deployed, QuickSight datasets created
+**Pre-requisites**: Data loaded, Streamlit deployed, QuickSight dashboard published
+
+---
+
+## Two Personas
+
+| Persona | Role | Tool | What they care about |
+|---|---|---|---|
+| **Compliance Officer** | Day-to-day surveillance | Streamlit in Snowflake | Flagged communications, trade violations, regulation search, STR generation |
+| **Head of Compliance / CCO** | Executive oversight | Amazon QuickSight + Amazon Q | Alert trends, severity distribution, employee risk, retention compliance |
 
 ---
 
@@ -12,12 +21,14 @@
 |---|---|---|
 | **Ingest (AWS)** | Amazon S3 | Trade records, communications, regulatory filings |
 | **RAW** | 5 tables | TRADE_RECORDS (200), COMMUNICATIONS (200), REGULATORY_FILINGS (15), EMPLOYEE_WATCHLIST (10), COMPLIANCE_DOCUMENTS (12) |
-| **CURATED** | 4 Dynamic Tables | ENRICHED_COMMUNICATIONS, TRADE_SURVEILLANCE, COMPLIANCE_EVENTS (400 events), RECORD_RETENTION_STATUS |
+| **CURATED** | 4 Dynamic Tables | ENRICHED_COMMUNICATIONS, TRADE_SURVEILLANCE, COMPLIANCE_EVENTS (400 flagged events), RECORD_RETENTION_STATUS |
 | **AI** | Cortex Search | Semantic search over 12 MAS regulations and internal policies |
 | | Bedrock SP | REVIEW_COMMUNICATION — compliance assessment per flagged comm |
 | | Bedrock SP | GENERATE_STR — formal Suspicious Transaction Report narrative |
 | **Consumption** | Streamlit | 4-tab Compliance Officer app |
-| | QuickSight | 2 datasets + Q Topic for executive NLP queries |
+| | QuickSight | 2-sheet dashboard (Compliance Overview + Trade Surveillance) + Q Topic |
+
+**Current data**: 400 flagged events | 107 CRITICAL | 142 HIGH | 151 MEDIUM | 21 trade violations | 200 communications reviewed | 10 employees on watchlist
 
 ---
 
@@ -27,7 +38,8 @@
 - [ ] Open Streamlit: `FSI_REGULATORY_COMPLIANCE.APP.REGULATORY_COMPLIANCE_APP`
 - [ ] Test Cortex Search: Tab 1, search "record retention" — confirm results appear
 - [ ] Test Bedrock: Tab 2, select COM-0001 (CRITICAL), click Review — confirm VIOLATION response
-- [ ] Open Snowsight in Chrome (full screen, dark mode recommended)
+- [ ] Open QuickSight: https://us-west-2.quicksight.aws.amazon.com/sn/dashboards/regulatory-compliance-dashboard
+- [ ] Test Amazon Q: ask "How many critical events by employee?"
 - [ ] Audio: quiet room, external mic
 - [ ] Resolution: 1920x1080
 
@@ -45,15 +57,17 @@
 
 ### [0:30–1:00] DATA PIPELINE (Show: Snowsight)
 
-> *"Trade records and communications land in Amazon S3 and flow into Snowflake via Snowpipe. Dynamic Tables automatically enrich each communication by cross-referencing the employee watchlist — flagging any message from a restricted person discussing restricted instruments. No orchestration, no scheduling, no DAGs."*
+> *"Trade records and communications land in Amazon S3 and flow into Snowflake via Snowpipe. Dynamic Tables automatically enrich each communication by cross-referencing the employee watchlist — flagging any message from a restricted person discussing restricted instruments. Zero orchestration, zero scheduling."*
 
 **Screen**: Run in Snowsight:
 ```sql
 SELECT 'TRADES' AS SOURCE, COUNT(*) FROM FSI_REGULATORY_COMPLIANCE.RAW.TRADE_RECORDS
 UNION ALL SELECT 'COMMUNICATIONS', COUNT(*) FROM FSI_REGULATORY_COMPLIANCE.RAW.COMMUNICATIONS
-UNION ALL SELECT 'COMPLIANCE EVENTS', COUNT(*) FROM FSI_REGULATORY_COMPLIANCE.CURATED.COMPLIANCE_EVENTS;
+UNION ALL SELECT 'FLAGGED EVENTS', COUNT(*) FROM FSI_REGULATORY_COMPLIANCE.CURATED.COMPLIANCE_EVENTS;
 ```
-Then show Dynamic Table lineage in Snowsight UI (click on COMPLIANCE_EVENTS → Graph tab)
+Expected output: 200 trades, 200 communications, 400 flagged events.
+
+Then show Dynamic Table lineage in Snowsight UI (click on COMPLIANCE_EVENTS → Graph tab).
 
 ---
 
@@ -67,9 +81,9 @@ Then show Dynamic Table lineage in Snowsight UI (click on COMPLIANCE_EVENTS → 
 
 ### [1:30–2:00] COMMUNICATION REVIEW (Show: Streamlit Tab 2)
 
-> *"Next, the flagged communication queue. 90 communications flagged — filter to CRITICAL. Here's David Tan emailing about 'DBS position sizing before an announcement.' He's on the restricted list for DBS access to material non-public information. One click sends this to Amazon Bedrock."*
+> *"Next, the flagged communication queue. 107 CRITICAL severity events need attention. Here's David Tan emailing about 'DBS position sizing before an announcement.' He's on the restricted list for DBS access to material non-public information. One click sends this to Amazon Bedrock."*
 
-**Screen**: Tab 2 → Filter CRITICAL + HIGH → Select COM-0001 → Show email body (highlighted suspicious text) → Click "Review with Amazon Bedrock" → Show response: VIOLATION, CRITICAL severity, escalation required, MAS Notice SFA04-N11 referenced
+**Screen**: Tab 2 → Filter CRITICAL + HIGH → Select a suspicious communication → Show email body → Click "Review with Amazon Bedrock" → Show response: VIOLATION, CRITICAL severity, escalation required, MAS Notice SFA04-N11 referenced
 
 ---
 
@@ -77,15 +91,15 @@ Then show Dynamic Table lineage in Snowsight UI (click on COMPLIANCE_EVENTS → 
 
 > *"Violation confirmed. Now generate the Suspicious Transaction Report. Bedrock compiles all evidence — flagged emails, restricted trades, existing filings — into a formal MAS-ready STR narrative. What used to take a compliance team 3 days now takes 5 seconds."*
 
-**Screen**: Tab 4 → Select "EMP-001 — David Tan (Equities Trading)" → Show compliance events table → Click "Generate STR with Amazon Bedrock" → Show: STRONG evidence, IMMEDIATE urgency, $178K estimated impact, full narrative paragraph
+**Screen**: Tab 4 → Select "EMP-001 — David Tan (Equities Trading)" → Show compliance events table → Click "Generate STR with Amazon Bedrock" → Show: STRONG evidence, IMMEDIATE urgency, estimated financial impact, full narrative paragraph
 
 ---
 
-### [2:30–3:15] DASHBOARD + QUICKSIGHT (Show: Streamlit Tab 3, then QuickSight)
+### [2:30–3:15] EXECUTIVE VIEW — QUICKSIGHT (Show: QuickSight Dashboard)
 
-> *"The compliance dashboard gives executive visibility: 415 records under management, 400 flagged events, severity breakdown by employee and department. Record retention at 100% compliance. And in QuickSight, the Head of Compliance asks: 'Which employees have the most critical events?' — answered instantly by Amazon Q."*
+> *"The Head of Compliance needs executive visibility. QuickSight connects directly to Snowflake — no ETL, no data movement. Two sheets: Compliance Overview shows 400 flagged events with severity breakdown by employee. Trade Surveillance shows 21 violations across restricted instruments. And with Amazon Q, just ask: 'Which employees have the most critical events?'"*
 
-**Screen**: Tab 3 — KPIs, severity chart, employee breakdown → Switch to QuickSight → Q bar: "How many critical events by employee?"
+**Screen**: QuickSight dashboard → Sheet 1 (Compliance Overview): KPI, severity chart, employee chart → Sheet 2 (Trade Surveillance): trades by status, by instrument → Amazon Q bar: "How many critical events by employee?"
 
 ---
 
