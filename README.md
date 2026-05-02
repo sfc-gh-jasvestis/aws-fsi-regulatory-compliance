@@ -135,14 +135,6 @@ Expected: 200 trades, 200 comms, 400 events, 12 docs.
 
 ---
 
-## SE Demo Account Notes
-
-- **Network policy**: If your account blocks external IPs, create a user-level network policy for `QUICKSIGHT_FSI_SVC` allowing QuickSight us-west-2 IPs (54.70.204.128/27).
-- **Bedrock model**: Uses `us.anthropic.claude-sonnet-4-5-20250929-v1:0`. The older `-20250514` model is marked legacy.
-- **Cortex Search**: Indexes 12 documents. Add more to `COMPLIANCE_DOCUMENTS` table and the service auto-refreshes within 1 hour.
-
----
-
 ## Legal
 
 This is a personal project and is **not an official Snowflake offering**. It comes with no support or warranty. Do not use in production without thorough review and testing.
