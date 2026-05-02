@@ -1,0 +1,16 @@
+definition_version: 2
+
+entities:
+  regulatory_compliance_app:
+    type: streamlit
+    identifier:
+      name: REGULATORY_COMPLIANCE_APP
+      schema: APP
+      database: FSI_REGULATORY_COMPLIANCE
+    title: "MAS Regulatory Compliance"
+    comment: "Singapore FSI Demo — Bedrock + Cortex Search + QuickSight"
+    query_warehouse: WH_REGULATORY
+    main_file: streamlit_app.py
+    stage: FSI_REGULATORY_COMPLIANCE.APP.STREAMLIT_STAGE
+    artifacts:
+      - streamlit_app.py
