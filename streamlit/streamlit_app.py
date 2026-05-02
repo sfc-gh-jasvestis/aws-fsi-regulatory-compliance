@@ -144,7 +144,7 @@ with tab1:
                         safe_ctx = context.replace("'", "''").replace("\\", "\\\\")
                         safe_query = query.replace("'", "''")
                         summary = session.sql(f"""
-                            SELECT SNOWFLAKE.CORTEX.AI_COMPLETE('claude-sonnet-4',
+                            SELECT SNOWFLAKE.CORTEX.COMPLETE('claude-4-sonnet',
                                 'You are a regulatory compliance expert at a Singapore MAS-regulated bank.
                                 Answer the question based ONLY on the documents below. Be specific about regulatory requirements, thresholds, and penalties.
                                 Reference document titles. Write dollar amounts as plain text.
