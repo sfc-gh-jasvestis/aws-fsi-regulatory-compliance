@@ -16,21 +16,21 @@
 
 ## Architecture
 
+A MAS regulatory compliance and surveillance platform built on **Snowflake** (Snowpipe, Dynamic Tables, Cortex Search, External Access) and **AWS** (S3, Bedrock Claude, QuickSight + Amazon Q). Records auto-ingest from S3; Bedrock reviews communications and drafts STR narratives; QuickSight gives the compliance officer a direct-query lens.
+
+```mermaid
+flowchart LR
+    S3[S3 records communications + trades] --> SP[Snowpipe auto-ingest]
+    SP --> SF[Snowflake Dynamic Tables ENRICHED_COMMUNICATIONS / TRADE_SURVEILLANCE / COMPLIANCE_EVENTS / RECORD_RETENTION_STATUS]
+    SF --> CSearch[Cortex Search 12 MAS regulations]
+    SF --> EA[External Access SigV4]
+    EA --> BR[Amazon Bedrock Claude]
+    BR --> SP1[REVIEW_COMMUNICATION SP]
+    BR --> SP2[GENERATE_STR SP]
+    SF --> ST[Streamlit Compliance Console]
+    SF --> QS[QuickSight DIRECT_QUERY + Amazon Q]
 ```
-AWS Data Plane                     Snowflake AI Data Cloud
-───────────────────                ──────────────────────────────────
-Amazon S3 (records)        ──────▶ RAW (Snowpipe auto-ingest)
-                                   CURATED (Dynamic Tables, 5 min lag)
-                                   ├── ENRICHED_COMMUNICATIONS
-                                   ├── TRADE_SURVEILLANCE
-                                   ├── COMPLIANCE_EVENTS
-                                   └── RECORD_RETENTION_STATUS
-Amazon Bedrock (Claude)    ◀─────▶ AI (External Access, SigV4 → Converse API)
-                                   ├── REVIEW_COMMUNICATION SP
-                                   ├── GENERATE_STR SP
-                                   └── Cortex Search (12 MAS regulations)
-Amazon QuickSight          ◀─────  CURATED Views (DIRECT_QUERY)
-```
+
 
 | Layer | AWS | Snowflake |
 |---|---|---|
