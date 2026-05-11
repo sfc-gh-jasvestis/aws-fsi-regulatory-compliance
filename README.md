@@ -19,6 +19,27 @@ flowchart LR
     SF --> QS[QuickSight DIRECT_QUERY + Amazon Q]
 ```
 
+## Snowflake Capabilities
+
+| Capability | Implementation |
+|-----------|---------------|
+| Dynamic Tables | ENRICHED_COMMUNICATIONS / TRADE_SURVEILLANCE / COMPLIANCE_EVENTS / RECORD_RETENTION_STATUS |
+| Snowpipe | Auto-ingest records and communications from S3 |
+| Cortex Search | 12 MAS regulations and internal policies indexed |
+| Cortex Agent | ComplianceAnalyst + RegulatorySearch tools |
+| Semantic View | Structured analytics over communications, trades, events |
+| Streamlit | Compliance Console with surveillance and STR generation |
+| External Access | SigV4-signed calls to Amazon Bedrock for AI review |
+
+## AWS Services
+
+| Service | Role in Demo |
+|---------|-------------|
+| Amazon S3 | Landing zone for trade records and communications |
+| Amazon Bedrock | Claude-powered communication review and STR generation |
+| Amazon QuickSight | Executive compliance dashboard with direct query |
+| Amazon Q | Natural language analytics for Head of Compliance |
+
 ## Personas
 
 | Persona | Role | Key Questions |
