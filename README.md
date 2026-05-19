@@ -87,6 +87,14 @@ Run the SQL scripts in `snowflake/` (skip `01_integrations.sql`) and deploy the 
 ### Full AWS + Snowflake
 Run all SQL scripts including `01_integrations.sql`, deploy the main Streamlit app from `streamlit/`, then run the QuickSight setup from `quicksight/`.
 
+## Business Impact
+
+Industry research and Snowflake customer outcomes:
+- **95% of traditional monitoring alerts** are false positives -- Industry benchmark
+- **AI reduces false positive alerts** by 60-85% -- Danske Bank / HSBC case studies
+- **FIS** (Snowflake customer): compliance data processed 20x faster on Snowflake, severity-1 incidents down 68% -- snowflake.com/customers
+- **Non-compliance fines** totaled $8.86B in 2023 alone (57% YoY increase) -- LexisNexis
+
 ## Key Demo Numbers
 
 - **200 communications** monitored with ~45% flagged as suspicious
@@ -97,3 +105,5 @@ Run all SQL scripts including `01_integrations.sql`, deploy the main Streamlit a
 ## License
 
 Apache 2.0 — See [LICENSE](LICENSE) for details.
+
+This is a personal demo project and is not an official Snowflake offering. It comes with no support or warranty. Industry metrics cited are from publicly available third-party research and Snowflake customer stories; they represent reported outcomes and are not guarantees of results.
