@@ -94,6 +94,7 @@ Industry research and Snowflake customer outcomes:
 - **AI reduces false positive alerts** by 60-85% -- Danske Bank / HSBC case studies
 - **FIS** (Snowflake customer): compliance data processed 20x faster on Snowflake, severity-1 incidents down 68% -- snowflake.com/customers
 - **Non-compliance fines** totaled $8.86B in 2023 alone (57% YoY increase) -- LexisNexis
+- **FIS** achieved 7x faster data loads and processes 1 billion transactions without issue on Snowflake -- snowflake.com/customers
 
 ## Key Demo Numbers
 
