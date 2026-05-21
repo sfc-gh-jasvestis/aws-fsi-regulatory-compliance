@@ -90,11 +90,11 @@ Run all SQL scripts including `01_integrations.sql`, deploy the main Streamlit a
 ## Business Impact
 
 Industry research and Snowflake customer outcomes:
-- **95% of traditional monitoring alerts** are false positives -- Industry benchmark
-- **AI reduces false positive alerts** by 60-85% -- Danske Bank / HSBC case studies
+- **95% of traditional monitoring alerts** are false positives -- [Industry benchmark](https://www.mckinsey.com/capabilities/risk-and-resilience/our-insights/the-new-frontier-in-anti-money-laundering)
+- **AI reduces false positive alerts** by 60-85% -- [Danske Bank / HSBC case studies](https://www.mckinsey.com/capabilities/risk-and-resilience/our-insights/how-agentic-ai-can-change-the-way-banks-fight-financial-crime)
 - **FIS** (Snowflake customer): compliance data processed 20x faster on Snowflake, severity-1 incidents down 68% -- [snowflake.com/customers/fis](https://www.snowflake.com/en/customers/all-customers/case-study/fis/)
-- **Non-compliance fines** totaled $8.86B in 2023 alone (57% YoY increase) -- LexisNexis
-- **FIS** achieved 7x faster data loads and processes 1 billion transactions without issue on Snowflake -- [snowflake.com/customers/fis](https://www.snowflake.com/en/customers/all-customers/case-study/fis/)
+- **Non-compliance fines** totaled $8.86B in 2023 alone (57% YoY increase) -- [LexisNexis](https://risk.lexisnexis.com/insights-resources/research/true-cost-of-financial-crime-compliance-study-global-report)
+
 
 ## Key Demo Numbers
 
